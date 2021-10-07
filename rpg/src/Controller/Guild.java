@@ -20,11 +20,14 @@ public class Guild {
 	public void showGuildList() {
 		Player me = getPlayer();
 		
+		System.out.println("------------- 길드원 리스트 -------------");
 		System.out.println("골드: " + me.getGold());
-		for(int i = 0; i < me.guildMemberSize(); i++) {
-			System.out.print((i+1) + ". ");
-			me.getGuildMember(i).showUnit();
+		int numbering = 1;
+		for(Unit unit : getPlayer().getGuildMemberList()) {
+			System.out.print(numbering++ + ". ");
+			unit.showUnit();
 		}
+		System.out.println();
 	}
 
 	public void addGuildMember() {
@@ -74,7 +77,7 @@ public class Guild {
 	}
 	
 	public void removeGuildMember() {
-		showAllGuildMember();
+		showGuildList();
 		int size = getPlayer().guildMemberSize();
 		System.out.printf("삭제할 길드원[1~%d]: ", size);
 		String select = sc.next();
@@ -84,6 +87,8 @@ public class Guild {
 			
 			if(sel >= 0 && sel < size) {
 				System.out.printf("[이름 : %s] 길드원을 삭제합니다.\n", getPlayer().getGuildMember(sel).getName());
+				this.units.remove(sel);
+				pc.removeGuildMember(Player.log, sel);
 			}
 			else System.out.println("[실패] 잘못 선택하셨습니다.");
 			
@@ -93,25 +98,26 @@ public class Guild {
 	}
 
 	public void changePartyMember() {
-		int number = 0;
 		boolean chk = false;
-		for(Unit unit : getPlayer().getGuildMemberList()) {
-			if(unit.getParty()) {
-				System.out.print(++number + ". ");
+		ArrayList<Unit> partyUnit = getPartyMember();
+		
+		if(partyUnit.size() > 0) {
+			chk = true;			
+			
+			for(Unit unit : partyUnit) {
 				unit.showUnit();
-				chk = true;
 			}
 		}
-		
+				
 		if(chk) {
-			System.out.printf("교체할 파티원 [1~%d]: ", number);
+			System.out.printf("교체할 파티원 [1~%d]: ", partyUnit.size());
 			String select = sc.next();
 			
 			try {
 				int sel = Integer.parseInt(select) - 1;
 				
-				if(sel >= 0 && sel < number) {
-					showAllGuildMember();
+				if(sel >= 0 && sel < partyUnit.size()) {
+					showGuildList();
 					int size = getPlayer().guildMemberSize();
 					System.out.printf("참가할 길드원[1~%d]: ", size);
 					String select2 = sc.next();
@@ -120,10 +126,13 @@ public class Guild {
 						int sel2 = Integer.parseInt(select2) - 1;
 						
 						if(sel2 >= 0 && sel2 < size) {
-							String name = getPlayer().getGuildMember(sel).getName();//바꿔
+							int idx = findIdx(partyUnit.get(sel).getName());
+							String name = getPlayer().getGuildMember(idx).getName();
 							String name2 = getPlayer().getGuildMember(sel2).getName();
 							
-							System.out.printf("[이름 : %s] 에서 [이름 : %s] 로 길드원을 교체합니다.\n", name, name2);
+							getPlayer().getGuildMember(idx).setParty(false);
+							getPlayer().getGuildMember(sel2).setParty(true);
+							System.out.printf("[이름 : %s] 에서 [이름 : %s] 로 파티원을 교체합니다.\n", name, name2);
 						}
 						else System.out.println("[실패] 잘못 선택하셨습니다.");
 					} catch (Exception e) {
@@ -136,17 +145,76 @@ public class Guild {
 				// TODO: handle exception
 			}
 		}
+		
+		else randomAddPartyMember();
 	}
 
-	public void sort() {
+	private int findIdx(String name) {
+		int idx = -1;
+		for(int i = 0; i < this.units.size(); i++) {
+			if(this.units.get(i).getName().equals(name)) idx = i;
+		}
 		
+		return idx;
 	}
 	
-	private void showAllGuildMember() {
-		int numbering = 1;
+	private ArrayList<Unit> getPartyMember(){
+		ArrayList<Unit> partyUnit = new ArrayList<Unit>();
+		
 		for(Unit unit : getPlayer().getGuildMemberList()) {
-			System.out.print(numbering++ + ". ");
-			unit.showUnit();
+			if(unit.getParty()) partyUnit.add(unit);
 		}
+		
+		return partyUnit;
+	}
+	
+	private void randomAddPartyMember() {
+		System.out.println("파티에 참가하는 파티원이 없습니다. 추가하시겠습니까? Yes:1 / No:0");
+		String input = sc.next();
+		
+		try {
+			int sel = Integer.parseInt(input);
+			
+			if(sel == 1) {
+				int size = getPlayer().guildMemberSize();
+				int maxParty = size / 2;
+				
+				for(int i = 0; i < maxParty; i++) {
+					int r = ran.nextInt(size);
+					
+					Unit unit = getPlayer().getGuildMember(r);
+					if(!unit.getParty()) {
+						unit.setParty(true);							
+					}
+					else i--;
+				}
+				
+				showGuildList();
+				System.out.println("[성공]랜덤 파티원 추가완료");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	public void sort() {
+		System.out.println("1.레벨순  2.체력순  3.공격력순  4.방어력순  5.파티원");
+		String input = sc.next();
+		
+		try {
+			int sel = Integer.parseInt(input);
+			
+			if(sel >= 1 && sel <= 5) {
+				if(sel == 1) sortGuildList();
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+	private void sortGuildList() {
+		// TODO Auto-generated method stub
+		
 	}
 }

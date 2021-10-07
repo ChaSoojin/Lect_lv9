@@ -37,6 +37,10 @@ public class Unit {
 		return this.party;
 	}
 	
+	public void setParty(boolean party) {
+		this.party = party;
+	}
+	
 	public String getName() {
 		return this.name;
 	}

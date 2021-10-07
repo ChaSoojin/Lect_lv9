@@ -44,6 +44,10 @@ public class Player {
 		this.gold = gold;
 	}
 	
+	public void removeGuildMember(int idx) {
+		this.guildMember.remove(idx);
+	}
+	
 	@Override
 	public String toString() {
 		String data = "";
