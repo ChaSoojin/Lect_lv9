@@ -1,40 +1,66 @@
 import Controller.FileController;
 import Controller.Guild;
+import Controller.PlayerController;
 
 class MainGame {
 	private Guild guild = Guild.instance;
 	private FileController fc = FileController.instance;
+	private PlayerController pc = PlayerController.instance;
 	
 	public void run() {
 		boolean isRun = true;
 		while(isRun) {
-			isRun = mainMenu();
+			printAllData();
+			isRun = loginMenu();
 		}
 	}
 	
-	private boolean mainMenu() {
-		System.out.println("= RPG MAIN MENU =");
-		System.out.println("1.길드관리\n2.상점\n3.인벤토리\n4.저장\n5.로드\n0.종료");
-		System.out.println("=================");
+	private boolean loginMenu() {
+		System.out.println("=========== RPG Login Menu ==========");
+		System.out.println("1.가입  2.탈퇴  3.로그인  4.로그아웃  0.종료");
 		System.out.print("선택> ");
 		String select = guild.sc.next();
-		
+
 		try {
 			int sel = Integer.parseInt(select);
-			
-			if(sel == 1) guildMenu();
-			else if(sel == 2) {}
-			else if(sel == 3) {}
-			else if(sel == 4) fc.save();
-			else if(sel == 5) fc.load();
-			else if(sel == 0) {
-				System.out.println("GAME 종료");
+
+			if (sel == 1) pc.join();
+			else if (sel == 2) pc.deletePlayer();
+			else if (sel == 3) {
+				if(pc.login()) mainMenu();
+			}
+			else if (sel == 4) pc.logout();
+			else if (sel == 0) {
+				fc.save();
+				System.out.println("RPG 게임종료");
 				return false;
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}		
+		} catch (Exception e) {}
 		return true;
+	}
+	
+	private void mainMenu() {
+		while(true) {
+			System.out.println("= RPG MAIN MENU =");
+			System.out.println("1.길드관리\n2.상점\n3.인벤토리\n4.저장\n5.로드\n0.뒤로가기");
+			System.out.println("=================");
+			System.out.print("선택> ");
+			String select = guild.sc.next();
+			
+			try {
+				int sel = Integer.parseInt(select);
+				
+				if(sel == 1) guildMenu();
+				else if(sel == 2) {}
+				else if(sel == 3) {}
+				else if(sel == 4) fc.save();
+				else if(sel == 5) fc.load();
+				else if(sel == 0) return;
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}		
+		}
 	}
 
 	private void guildMenu() {
@@ -57,6 +83,13 @@ class MainGame {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}	
+	}
+	
+	private void printAllData() {
+		for(int i = 0; i < pc.getPlayerSize(); i++) {
+			String data = pc.getPlayer(i).toString();
+			System.out.println(data);
+		}
 	}
 }
 
