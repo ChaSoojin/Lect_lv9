@@ -20,7 +20,7 @@ public class Guild {
 	public void showGuildList() {
 		Player me = getPlayer();
 		
-		System.out.println("------------- 길드원 리스트 -------------");
+		System.out.println("---------------- 길드원 리스트 ----------------");
 		System.out.println("골드: " + me.getGold());
 		int numbering = 1;
 		for(Unit unit : getPlayer().getGuildMemberList()) {
@@ -205,7 +205,13 @@ public class Guild {
 			int sel = Integer.parseInt(input);
 			
 			if(sel >= 1 && sel <= 5) {
-				if(sel == 1) sortGuildList();
+				if(sel == 1) sortLevel();
+				else if(sel == 2) sortHp();
+				else if(sel == 3) sortOff();
+				else if(sel == 4) sortDef();
+				else if(sel == 5) sortPartyMember();
+				
+				showGuildList();
 			}
 			
 		} catch (Exception e) {
@@ -213,8 +219,62 @@ public class Guild {
 		}
 	}
 
-	private void sortGuildList() {
-		// TODO Auto-generated method stub
-		
+	private void sortPartyMember() {
+		ArrayList<Unit> partyMember = getPartyMember();
+		for(Unit unit : partyMember) {
+			unit.showUnit();
+		}
+	}
+	
+	private void sortDef() {
+		ArrayList<Unit> units = getPlayer().getGuildMemberList();
+		for(int i = 0; i < units.size(); i++) {
+			for(int j = i+1; j < units.size(); j++) {
+				if(units.get(i).getDef() > units.get(j).getDef()) {
+					Unit tmp = units.get(i);
+					units.set(i, units.get(j));
+					units.set(j, tmp);
+				}
+			}
+		}
+	}
+
+	private void sortOff() {
+		ArrayList<Unit> units = getPlayer().getGuildMemberList();
+		for(int i = 0; i < units.size(); i++) {
+			for(int j = i+1; j < units.size(); j++) {
+				if(units.get(i).getOff() > units.get(j).getOff()) {
+					Unit tmp = units.get(i);
+					units.set(i, units.get(j));
+					units.set(j, tmp);
+				}
+			}
+		}
+	}
+
+	private void sortHp() {
+		ArrayList<Unit> units = getPlayer().getGuildMemberList();
+		for(int i = 0; i < units.size(); i++) {
+			for(int j = i+1; j < units.size(); j++) {
+				if(units.get(i).getHp() > units.get(j).getHp()) {
+					Unit tmp = units.get(i);
+					units.set(i, units.get(j));
+					units.set(j, tmp);
+				}
+			}
+		}
+	}
+
+	private void sortLevel() {
+		ArrayList<Unit> units = getPlayer().getGuildMemberList();
+		for(int i = 0; i < units.size(); i++) {
+			for(int j = i+1; j < units.size(); j++) {
+				if(units.get(i).getLevel() > units.get(j).getLevel()) {
+					Unit tmp = units.get(i);
+					units.set(i, units.get(j));
+					units.set(j, tmp);
+				}
+			}
+		}
 	}
 }

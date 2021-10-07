@@ -48,4 +48,20 @@ public class Unit {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public int getLevel() {
+		return this.level;
+	}
+	
+	public int getHp() {
+		return this.hp;
+	}
+	
+	public int getOff() {
+		return this.off;
+	}
+	
+	public int getDef() {
+		return this.def;
+	}
 }
