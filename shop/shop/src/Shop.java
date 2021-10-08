@@ -15,7 +15,7 @@ public class Shop {
 		fc.load();
 		boolean run = true;
 		while (run) {
-			//printAllData();
+			printAllData();
 			run = mainMenu();
 		}
 	}
