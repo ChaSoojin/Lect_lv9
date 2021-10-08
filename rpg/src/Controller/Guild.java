@@ -12,9 +12,39 @@ public class Guild {
 	public static Random ran = new Random();
 	private ArrayList<Unit> units = null;
 	private PlayerController pc = PlayerController.instance;
+	private Unit[] partyUnit = null;
 	
-	private Guild() {
+	public void setGuild() {
 		this.units = new ArrayList<Unit>();
+		this.partyUnit = new Unit[4];
+		
+		Unit newUnit = new Unit("호랑이", 1, 100, 10, 5, 0);
+		this.units.add(newUnit);
+		
+		newUnit = new Unit("강아지", 1, 80, 7, 3, 0);
+		this.units.add(newUnit);
+
+		newUnit = new Unit("사슴", 1, 50, 3, 1, 0);
+		this.units.add(newUnit);
+
+		newUnit = new Unit("두더지", 1, 70, 5, 2, 0);
+		this.units.add(newUnit);
+		
+		newUnit = new Unit("돼지", 1, 200, 4, 8, 0);
+		this.units.add(newUnit);
+		
+		newUnit = new Unit("사자", 1, 120, 11, 7, 0);
+		this.units.add(newUnit);
+		
+		for(int i = 0; i < 4; i++) {
+			int r = ran.nextInt(this.units.size());
+			
+			if(!this.units.get(r).getParty()) {
+				this.units.get(r).setParty(true);
+				this.partyUnit[i] = this.units.get(r);
+			}
+			else i--;
+		}
 	}
 	
 	public void showGuildList() {
@@ -86,9 +116,12 @@ public class Guild {
 			int sel = Integer.parseInt(select) - 1;
 			
 			if(sel >= 0 && sel < size) {
-				System.out.printf("[이름 : %s] 길드원을 삭제합니다.\n", getPlayer().getGuildMember(sel).getName());
-				this.units.remove(sel);
-				pc.removeGuildMember(Player.log, sel);
+				if(this.units.get(sel).getParty()) System.out.println("[실패]파티중인 길드원 삭제불가");
+				else {
+					System.out.printf("[이름 : %s] 길드원을 삭제합니다.\n", getPlayer().getGuildMember(sel).getName());
+					this.units.remove(sel);
+					pc.removeGuildMember(Player.log, sel);					
+				}
 			}
 			else System.out.println("[실패] 잘못 선택하셨습니다.");
 			
@@ -97,56 +130,45 @@ public class Guild {
 		}
 	}
 
-	public void changePartyMember() {
-		boolean chk = false;
-		ArrayList<Unit> partyUnit = getPartyMember();
+	public void changePartyMember() {		
+		sortPartyMember();
+			
+		System.out.printf("교체할 파티원 [1~%d]: ", partyUnit.length);
+		String select = sc.next();
 		
-		if(partyUnit.size() > 0) {
-			chk = true;			
+		try {
+			int sel = Integer.parseInt(select) - 1;
 			
-			for(Unit unit : partyUnit) {
-				unit.showUnit();
-			}
-		}
+			if(sel >= 0 && sel < partyUnit.length) {
+				showGuildList();
+				int size = getPlayer().guildMemberSize();
+				System.out.printf("참가할 길드원[1~%d]: ", size);
+				String select2 = sc.next();
 				
-		if(chk) {
-			System.out.printf("교체할 파티원 [1~%d]: ", partyUnit.size());
-			String select = sc.next();
-			
-			try {
-				int sel = Integer.parseInt(select) - 1;
-				
-				if(sel >= 0 && sel < partyUnit.size()) {
-					showGuildList();
-					int size = getPlayer().guildMemberSize();
-					System.out.printf("참가할 길드원[1~%d]: ", size);
-					String select2 = sc.next();
+				try {
+					int sel2 = Integer.parseInt(select2) - 1;
 					
-					try {
-						int sel2 = Integer.parseInt(select2) - 1;
+					if(sel2 >= 0 && sel2 < size) {
+						int idx = findIdx(partyUnit[sel].getName());
+						String name = getPlayer().getGuildMember(idx).getName();
+						String name2 = getPlayer().getGuildMember(sel2).getName();
 						
-						if(sel2 >= 0 && sel2 < size) {
-							int idx = findIdx(partyUnit.get(sel).getName());
-							String name = getPlayer().getGuildMember(idx).getName();
-							String name2 = getPlayer().getGuildMember(sel2).getName();
-							
-							getPlayer().getGuildMember(idx).setParty(false);
-							getPlayer().getGuildMember(sel2).setParty(true);
-							System.out.printf("[이름 : %s] 에서 [이름 : %s] 로 파티원을 교체합니다.\n", name, name2);
-						}
-						else System.out.println("[실패] 잘못 선택하셨습니다.");
-					} catch (Exception e) {
-						// TODO: handle exception
+						getPlayer().getGuildMember(idx).setParty(false);
+						getPlayer().getGuildMember(sel2).setParty(true);
+						System.out.printf("[이름 : %s] 에서 [이름 : %s] 로 파티원을 교체합니다.\n", name, name2);
 					}
+					else System.out.println("[실패] 잘못 선택하셨습니다.");
+				} catch (Exception e) {
+					// TODO: handle exception
 				}
-				else System.out.println("[실패] 잘못 선택하셨습니다.");
-				
-			} catch (Exception e) {
-				// TODO: handle exception
 			}
+			else System.out.println("[실패] 잘못 선택하셨습니다.");
+			
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+	
 		
-		else randomAddPartyMember();
 	}
 
 	private int findIdx(String name) {
@@ -219,10 +241,9 @@ public class Guild {
 		}
 	}
 
-	private void sortPartyMember() {
-		ArrayList<Unit> partyMember = getPartyMember();
-		for(Unit unit : partyMember) {
-			unit.showUnit();
+	private void sortPartyMember() {	
+		for(int i = 0; i < 4; i++) {
+			this.partyUnit[i].showUnit();
 		}
 	}
 	

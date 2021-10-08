@@ -2,8 +2,10 @@ import Controller.FileController;
 import Controller.Guild;
 import Controller.PlayerController;
 import Controller.Shop;
+import models.Player;
 
 class MainGame {
+	private Player player = new Player();
 	private Guild guild = Guild.instance;
 	private FileController fc = FileController.instance;
 	private PlayerController pc = PlayerController.instance;
@@ -57,7 +59,10 @@ class MainGame {
 				else if(sel == 3) {}
 				else if(sel == 4) fc.save();
 				else if(sel == 5) fc.load();
-				else if(sel == 0) return;
+				else if(sel == 0) {
+					Player.log = -1;
+					return;
+				}
 				
 			} catch (Exception e) {
 				// TODO: handle exception

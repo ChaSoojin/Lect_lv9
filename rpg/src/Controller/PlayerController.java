@@ -7,7 +7,7 @@ public class PlayerController {
 	public static PlayerController instance = new PlayerController();
 	private ArrayList<Player> players = null;
 
-	private PlayerController() {
+	public PlayerController() {
 		this.players = new ArrayList<Player>();
 	}
 
