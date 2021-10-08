@@ -8,9 +8,11 @@ public class Player {
 	private String pw;
 	private int gold;
 	private ArrayList<Unit> guildMember = null;
+	private ArrayList<Item> myItem = null;
 	
 	public Player(String id, String pw) {
 		this.guildMember = new ArrayList<Unit>();
+		this.myItem = new ArrayList<Item>();
 		this.id = id;
 		this.pw = pw;
 		gold = 5000;
@@ -34,6 +36,14 @@ public class Player {
 	
 	public ArrayList<Unit> getGuildMemberList(){
 		return this.guildMember;
+	}
+	
+	public Item getMyItem(int idx) {
+		return this.myItem.get(idx);
+	}
+	
+	public ArrayList<Item> getMyItems(){
+		return this.myItem;
 	}
 	
 	public int guildMemberSize() {

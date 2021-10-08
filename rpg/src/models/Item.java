@@ -31,4 +31,8 @@ public class Item {
 	public int getPrice() {
 		return this.price;
 	}
+	
+	public void showItem() {
+		System.out.printf("[이름 : %s] [능력 : %d] [가격 : %d]\n", this.name, this.power, this.price);
+	}
 }
