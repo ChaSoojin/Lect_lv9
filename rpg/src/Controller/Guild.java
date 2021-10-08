@@ -230,7 +230,7 @@ public class Guild {
 		ArrayList<Unit> units = getPlayer().getGuildMemberList();
 		for(int i = 0; i < units.size(); i++) {
 			for(int j = i+1; j < units.size(); j++) {
-				if(units.get(i).getDef() > units.get(j).getDef()) {
+				if(units.get(i).getDef() < units.get(j).getDef()) {
 					Unit tmp = units.get(i);
 					units.set(i, units.get(j));
 					units.set(j, tmp);
@@ -243,7 +243,7 @@ public class Guild {
 		ArrayList<Unit> units = getPlayer().getGuildMemberList();
 		for(int i = 0; i < units.size(); i++) {
 			for(int j = i+1; j < units.size(); j++) {
-				if(units.get(i).getOff() > units.get(j).getOff()) {
+				if(units.get(i).getOff() < units.get(j).getOff()) {
 					Unit tmp = units.get(i);
 					units.set(i, units.get(j));
 					units.set(j, tmp);
@@ -256,7 +256,7 @@ public class Guild {
 		ArrayList<Unit> units = getPlayer().getGuildMemberList();
 		for(int i = 0; i < units.size(); i++) {
 			for(int j = i+1; j < units.size(); j++) {
-				if(units.get(i).getHp() > units.get(j).getHp()) {
+				if(units.get(i).getHp() < units.get(j).getHp()) {
 					Unit tmp = units.get(i);
 					units.set(i, units.get(j));
 					units.set(j, tmp);
@@ -269,7 +269,7 @@ public class Guild {
 		ArrayList<Unit> units = getPlayer().getGuildMemberList();
 		for(int i = 0; i < units.size(); i++) {
 			for(int j = i+1; j < units.size(); j++) {
-				if(units.get(i).getLevel() > units.get(j).getLevel()) {
+				if(units.get(i).getLevel() < units.get(j).getLevel()) {
 					Unit tmp = units.get(i);
 					units.set(i, units.get(j));
 					units.set(j, tmp);

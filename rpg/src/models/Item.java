@@ -15,4 +15,20 @@ public class Item {
 		this.power = power;
 		this.price = price;
 	}
+	
+	public int getKind() {
+		return this.kind;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public int getPower() {
+		return this.power;
+	}
+	
+	public int getPrice() {
+		return this.price;
+	}
 }

@@ -1,11 +1,13 @@
 import Controller.FileController;
 import Controller.Guild;
 import Controller.PlayerController;
+import Controller.Shop;
 
 class MainGame {
 	private Guild guild = Guild.instance;
 	private FileController fc = FileController.instance;
 	private PlayerController pc = PlayerController.instance;
+	private Shop shop = Shop.instance;
 	
 	public void run() {
 		boolean isRun = true;
@@ -51,7 +53,7 @@ class MainGame {
 				int sel = Integer.parseInt(select);
 				
 				if(sel == 1) guildMenu();
-				else if(sel == 2) {}
+				else if(sel == 2) shopMenu();
 				else if(sel == 3) {}
 				else if(sel == 4) fc.save();
 				else if(sel == 5) fc.load();
@@ -61,6 +63,25 @@ class MainGame {
 				// TODO: handle exception
 			}		
 		}
+	}
+
+	private void shopMenu() {
+		System.out.println("========= SHOP MENU =========");
+		System.out.println("1.¹«±â  2.°©¿Ê  3.¹ÝÁö  0.µÚ·Î°¡±â");
+		String select = guild.sc.next();
+		
+		try {
+			int sel = Integer.parseInt(select);
+			
+			if(sel == 1) shop.buyWeapon();
+			else if(sel == 2) shop.buyArmor();
+			else if(sel == 3) shop.buyRing();
+			else if(sel == 4) fc.save();
+			else if(sel == 0) return;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}		
 	}
 
 	private void guildMenu() {
